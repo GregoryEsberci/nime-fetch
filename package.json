@@ -1,0 +1,51 @@
+{
+  "name": "animefire-downloader-ui",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "checktypes": "tsc --noEmit",
+    "test": "NODE_ENV=test node --test",
+    "build": "tsc && tsx scripts/fix-imports.ts",
+    "start": "NODE_ENV=production node dist/index.js",
+    "dev": "NODE_ENV=development nodemon --watch src --exec tsx --inspect src/index.ts",
+    "db:drop": "rm -rf sqlite.db drizzle",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "yarn drizzle-kit studio"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.9",
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^17.2.0",
+    "drizzle-orm": "^0.44.2",
+    "express": "^5.1.0",
+    "http-status-codes": "^2.3.0",
+    "jsdom": "^26.1.0",
+    "mime": "^4.0.7",
+    "ts-morph": "^26.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
+    "@types/jest-when": "^3.5.5",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "22",
+    "drizzle-kit": "^0.31.4",
+    "eslint": "^9.30.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.1",
+    "globals": "^16.2.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.0"
+  },
+  "engines": {
+    "node": "22"
+  }
+}

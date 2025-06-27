@@ -1,0 +1,53 @@
+import {
+  SelectedFields,
+  SQLiteInsertValue,
+  SQLiteSelectBuilder,
+  SQLiteTable,
+  SQLiteUpdateSetSource,
+} from 'drizzle-orm/sqlite-core';
+import sqliteDb from './sqlite';
+import Database from 'better-sqlite3';
+import { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
+import { now } from '../../utils/db';
+
+type Transaction = Parameters<
+  Parameters<(typeof sqliteDb)['transaction']>[0]
+>[0];
+
+interface Options {
+  transaction?: Transaction;
+}
+
+export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {
+  abstract readonly schema: T;
+
+  protected transaction?: Transaction;
+
+  constructor(options: Options = {}) {
+    this.transaction = options.transaction;
+  }
+
+  private get db(): BetterSQLite3Database {
+    return this.transaction || sqliteDb;
+  }
+
+  select<T extends SelectedFields | undefined = undefined>(fields?: T) {
+    const select: SQLiteSelectBuilder<T, 'sync', Database.RunResult, 'db'> =
+      fields ? this.db.select(fields) : (this.db.select() as never);
+
+    return select.from(this.schema);
+  }
+
+  create(data: SQLiteInsertValue<T> | SQLiteInsertValue<T>[]) {
+    // TS complains because of overloads, and I don't want to handle it with JS now
+    return this.db.insert(this.schema).values(data as SQLiteInsertValue<T>);
+  }
+
+  update(data: SQLiteUpdateSetSource<T>) {
+    return this.db.update(this.schema).set({ updatedAt: now, ...data });
+  }
+
+  delete() {
+    return this.db.delete(this.schema);
+  }
+}
