@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 (() => {
   // Icons: https://heroicons.com/solid
   const solidIcons = {
