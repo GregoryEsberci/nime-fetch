@@ -1,20 +1,28 @@
 {
-  "name": "animefire-downloader-ui",
+  "name": "nime-fetch",
   "version": "1.0.0",
+  "homepage": "https://github.com/GregoryEsberci/nime-fetch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GregoryEsberci/nime-fetch.git"
+  },
   "license": "MIT",
-  "main": "dist/index.js",
+  "author": {
+    "name": "Grégory M. Esberci"
+  },
   "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint .",
-    "checktypes": "tsc --noEmit",
-    "test": "NODE_ENV=test node --test",
     "build": "tsc && tsx scripts/fix-imports.ts",
-    "start": "NODE_ENV=production node dist/index.js",
-    "dev": "NODE_ENV=development nodemon --watch src --exec tsx --inspect src/index.ts",
+    "checktypes": "tsc --noEmit",
     "db:drop": "rm -rf sqlite.db drizzle",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "yarn drizzle-kit studio"
+    "db:studio": "yarn drizzle-kit studio",
+    "dev": "NODE_ENV=development nodemon --watch src --exec tsx --inspect src/index.ts",
+    "lint": "eslint .",
+    "start": "NODE_ENV=production node dist/index.js",
+    "test": "NODE_ENV=test node --test"
   },
   "dependencies": {
     "@libsql/client": "^0.15.9",
