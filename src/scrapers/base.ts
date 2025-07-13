@@ -47,7 +47,7 @@ export default abstract class Scraper {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static isValidUrl(url: string): boolean {
-    throw new Error('Not implemented');
+    throw new ApiError('Not implemented');
   }
 
   abstract getAnime(): Promise<ScrapedAnime>;
@@ -64,7 +64,7 @@ export default abstract class Scraper {
     }
 
     if (!response.ok) {
-      throw new Error(`${response.statusText} on ${url}`);
+      throw new ApiError(`${response.statusText} on ${url}`);
     }
 
     return response.text();
@@ -89,7 +89,7 @@ export default abstract class Scraper {
     const response = await fetch(url, { method: 'HEAD' });
 
     if (!response.ok) {
-      throw new Error(`${response.statusText} on ${url}`);
+      throw new ApiError(`${response.statusText} on ${url}`);
     }
 
     return response.headers.get('content-disposition');

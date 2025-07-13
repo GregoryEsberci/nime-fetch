@@ -25,6 +25,10 @@
    * @type {HTMLInputElement}
    */
   const urlInput = form.querySelector('input[name="url"]');
+  /**
+   * @type {HTMLParagraphElement}
+   */
+  const inputError = form.querySelector('.error-message');
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -38,6 +42,8 @@
       submitButton.disabled = true;
       submitButton.textContent = 'Adding...';
       urlInput.disabled = true;
+      urlInput.classList.remove('input-error');
+      inputError.textContent = '';
 
       const response = await fetch('/url', {
         method: 'POST',
@@ -55,7 +61,10 @@
 
       await fetchLists();
     } catch (error) {
-      alert(`Error: ${error}`);
+      urlInput.classList.add('input-error');
+      inputError.textContent =
+        error instanceof Error ? error.message : `${error}`;
+
       console.error(error);
     } finally {
       submitButton.disabled = false;

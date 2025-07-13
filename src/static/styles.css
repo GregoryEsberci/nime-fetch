@@ -30,7 +30,8 @@ body {
   margin: 0;
 }
 
-button:disabled, .disabled {
+button:disabled,
+.disabled {
   cursor: not-allowed !important;
   opacity: 0.6;
 }
@@ -70,7 +71,32 @@ form {
 @media (min-width: 640px) {
   form {
     flex-direction: row;
+    align-items: flex-start;
   }
+}
+
+.input-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-error {
+  border-color: var(--color-error-bg) !important;
+  box-shadow: 0 0 6px 0 rgba(127, 29, 29, 1) !important;
+}
+
+.error-message {
+  color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius);
+}
+
+.error-message:empty {
+  display: none;
 }
 
 form input {
