@@ -4,14 +4,14 @@ import downloadedFileSchema, {
   DownloadedFile,
 } from './db/schemas/downloaded-file';
 import sleep from './utils/sleep';
+import stream from 'node:stream/promises';
+import fs from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
-import { pipeline } from 'node:stream/promises';
 import { increment } from './utils/db';
 import { SQLiteUpdateSetSource } from 'drizzle-orm/sqlite-core';
 import ContextLogger from './utils/context-logger';
 import { dirname, join } from 'node:path';
 import { DOWNLOAD_DIR } from './utils/constants';
-import { mkdir } from 'node:fs/promises';
 
 const LOOP_INTERVAL = 5000;
 const MAX_PEER_LOOP = 50;
@@ -47,9 +47,9 @@ const download = async (downloadFile: DownloadedFile) => {
 
     updateDownloadFile(downloadFile.id, { status: 'downloading' });
 
-    await mkdir(dirname(fullPath), { recursive: true });
+    await fs.mkdir(dirname(fullPath), { recursive: true });
 
-    await pipeline(response.body, createWriteStream(fullPath));
+    await stream.pipeline(response.body, createWriteStream(fullPath));
 
     updateDownloadFile(downloadFile.id, {
       status: 'done',

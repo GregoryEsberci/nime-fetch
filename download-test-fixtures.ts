@@ -1,14 +1,13 @@
-import { writeFile } from 'fs/promises';
+import fs from 'node:fs/promises';
 import { JSDOM } from 'jsdom';
-import path, { dirname } from 'path';
-import { mkdir } from 'fs/promises';
+import path from 'node:path';
 import { fileURLToPath } from 'url';
 
 const BASE_URL =
   'https://animefire.plus/animes/mob-psycho-100-iii-todos-os-episodios';
 
 const OUTPUT_DIR = path.resolve(
-  dirname(fileURLToPath(import.meta.url)),
+  path.dirname(fileURLToPath(import.meta.url)),
   'tests/__fixtures__',
 );
 async function fetchHtml(url) {
@@ -22,8 +21,8 @@ async function fetchHtml(url) {
 }
 
 const saveHtml = async (filename, html) => {
-  await mkdir(OUTPUT_DIR, { recursive: true });
-  await writeFile(path.join(OUTPUT_DIR, filename), html);
+  await fs.mkdir(OUTPUT_DIR, { recursive: true });
+  await fs.writeFile(path.join(OUTPUT_DIR, filename), html);
 };
 
 const listHtml = await fetchHtml(BASE_URL);

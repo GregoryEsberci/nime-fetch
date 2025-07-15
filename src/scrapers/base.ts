@@ -1,8 +1,8 @@
-import ApiError from '../utils/api-error.js';
+import ApiError from '../utils/api-error';
 import sleep from '../utils/sleep';
 import { JSDOM } from 'jsdom';
-import httpStatusCodes from 'http-status-codes';
-import ContextLogger from '../utils/context-logger.js';
+import ContextLogger from '../utils/context-logger';
+import httpStatusCodes from '../utils/http-status-codes';
 
 export interface ScrapedAnimeEpisode {
   pageUrl: string;

@@ -136,7 +136,7 @@ dist
 .pnp.*
 
 # drizzle
-/drizzle
-sqlite.db
+nime-fetch.db
 
-/src/downloads
+/downloads
+/src/static/index.html

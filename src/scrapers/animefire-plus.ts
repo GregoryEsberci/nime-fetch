@@ -1,9 +1,8 @@
-import { basename, extname } from 'node:path';
-import ApiError from '../utils/api-error.js';
-import sanitizeFileName from '../utils/sanitize-file-name.js';
-import sleep from '../utils/sleep.js';
-import Scraper, { ScrapedAnime, ScrapedAnimeEpisode } from './base.js';
-import ContextLogger from '../utils/context-logger.js';
+import path from 'node:path';
+import ApiError from '../utils/api-error';
+import sleep from '../utils/sleep';
+import Scraper, { ScrapedAnime, ScrapedAnimeEpisode } from './base';
+import ContextLogger from '../utils/context-logger';
 
 class AnimeFirePlusScraper extends Scraper {
   override logger = new ContextLogger('AnimeFirePlusScraper');
@@ -91,7 +90,7 @@ class AnimeFirePlusScraper extends Scraper {
         `${anime.title}-(${index + 1}).mp4`;
       fileName = fileName.replace('[AnimeFire.plus]', '');
 
-      const title = basename(sanitizeFileName(fileName), extname(fileName));
+      const title = path.basename(fileName, path.extname(fileName));
 
       this.logger.log(`Episode ${order} fileName: ${fileName}`);
 
