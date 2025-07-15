@@ -2,8 +2,8 @@ import 'dotenv/config';
 import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
-  out: './drizzle',
-  schema: './src/db/schemas/*',
+  out: 'drizzle',
   dialect: 'sqlite',
-  dbCredentials: { url: 'sqlite.db' },
+  schema: process.env.SCHEMA_PATH || 'src/db/schemas/*',
+  dbCredentials: { url: process.env.DATABASE_PATH || 'nime-fetch.db' },
 });

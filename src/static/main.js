@@ -28,6 +28,21 @@
    */
   const inputError = form.querySelector('.error-message');
 
+  const apiFetch = async (path, init) => {
+    const request = new Request(`${BASE_PATH}/api/${path}`, init);
+    const response = await fetch(request);
+    const jsonData = await response.json().catch(() => undefined);
+
+    if (!response.ok) {
+      const cause =
+        jsonData?.cause || `${response.status} ${response.statusText}`;
+
+      throw new Error(`Failed to ${request.method} ${request.url} – ${cause}`);
+    }
+
+    return { response, jsonData };
+  };
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -43,17 +58,11 @@
       urlInput.classList.remove('input-error');
       inputError.textContent = '';
 
-      const response = await fetch('/url', {
+      await apiFetch('url', {
         method: 'POST',
         body: JSON.stringify({ url }),
         headers: { 'Content-Type': 'application/json' },
       });
-
-      const data = await response.json().catch(() => undefined);
-
-      if (!response.ok) {
-        throw new Error(data?.cause || 'Unknown fetch error');
-      }
 
       urlInput.value = '';
 
@@ -152,14 +161,9 @@
 
   const fetchLists = async () => {
     try {
-      const response = await fetch('/list', { method: 'GET' });
-      const data = await response.json().catch(() => undefined);
+      const { jsonData } = await apiFetch('list');
 
-      if (!response.ok) {
-        throw new Error(data?.cause || 'Unknown error');
-      }
-
-      data.forEach((anime) => {
+      jsonData.forEach((anime) => {
         let animeSection = document.getElementById(`anime-${anime.id}`);
 
         if (animeSection) {

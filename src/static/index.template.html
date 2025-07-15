@@ -4,10 +4,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anime download</title>
-  <link rel="stylesheet" href="modern-normalize.css">
-  <link rel="stylesheet" href="styles.css">
   <meta name="color-scheme" content="dark">
+
+  <title>Anime download</title>
+  <link rel="icon" type="image/x-icon" href="{{BASE_PATH}}/favicon.ico">
+  </link>
+
+  <link rel="stylesheet" href="{{BASE_PATH}}/modern-normalize.css">
+  <link rel="stylesheet" href="{{BASE_PATH}}/styles.css">
+
+  <script>
+    window.BASE_PATH = "{{BASE_PATH}}"
+  </script>
+  <script src="{{BASE_PATH}}/main.js" defer></script>
 </head>
 
 <body>
@@ -28,8 +37,6 @@
     <div id="anime-list">
     </div>
   </main>
-
-  <script src="main.js"></script>
 </body>
 
 </html>

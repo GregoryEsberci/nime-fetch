@@ -1,1 +1,4 @@
-import './controllers';
+import './app';
+import './controllers/index';
+import './static';
+import './handlers';

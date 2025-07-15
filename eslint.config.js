@@ -11,7 +11,18 @@ export default defineConfig([
   eslintPluginPrettierRecommended,
   globalIgnores(['dist']),
   {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
+  {
     files: ['src/static/**'],
-    languageOptions: { globals: globals.browser },
+    languageOptions: {
+      globals: {
+        BASE_PATH: 'readonly',
+        ...globals.browser,
+      },
+    },
   },
 ]);

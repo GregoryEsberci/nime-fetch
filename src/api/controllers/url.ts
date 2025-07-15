@@ -1,11 +1,12 @@
-import { app } from '../app';
+import { router } from '../app';
 import registerAnimeFromUrl from '../../services/register-anime-from-url';
 import ApiError from '../../utils/api-error';
 import ContextLogger from '../../utils/context-logger';
-import httpStatusCodes from 'http-status-codes';
+import httpStatusCodes from '../../utils/http-status-codes';
+import sendResponseError from '../../utils/send-error-response';
 
-app.post('/url', async (request, response) => {
-  const logger = new ContextLogger('POST /url');
+router.post('/api/url', async (request, response) => {
+  const logger = new ContextLogger('POST api/url');
   try {
     const { url } = request.body;
 
@@ -30,18 +31,6 @@ app.post('/url', async (request, response) => {
   } catch (error) {
     logger.error('Error occurred:', error);
 
-    let statusCode;
-    let cause;
-
-    if (error instanceof ApiError) {
-      statusCode = error.statusCode;
-      cause = error.message;
-    } else if (error instanceof Error) {
-      cause = error.message;
-    }
-
-    response
-      .status(statusCode ?? httpStatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ cause });
+    sendResponseError(error, response);
   }
 });

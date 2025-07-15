@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 class ContextLogger {
   #id = crypto.randomUUID();
@@ -13,7 +13,6 @@ class ContextLogger {
     console.log(this.#formatMessage(message));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error(message: string, ...optionalParams: any[]) {
     console.error(this.#formatMessage(message), ...optionalParams);
   }
