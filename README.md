@@ -15,11 +15,61 @@ Currently only one site is supported, but others may be added in the future:
 - Node.js 22+
 - Yarn (recommended)
 
-### Installation
+## Installation Methods
+
+### Manual
+
+```bash
+git clone git@github.com:GregoryEsberci/nime-fetch.git      # ssh
+git clone https://github.com/GregoryEsberci/nime-fetch.git  # or HTTPS
+
+cd nime-fetch
+```
+
+Install dependencies and build the production bundle:
 
 ```bash
 yarn install
-````
+./scripts/build.sh
+```
+
+Start the server:
+
+```bash
+node dist/index.js
+```
+
+You can [configure environment variables](#environment-variables).
+
+To update to a new version, rebuild the static files:
+
+```bash
+yarn build
+```
+
+### With Docker
+
+```sh
+docker run -d \
+  --name nime-fetch \
+  --restart unless-stopped \
+  -v /path/to/downloads:/downloads \
+  -v /path/to/database:/database \
+  gregoryesberci/nime-fetch:latest
+```
+
+### With Docker Compose
+
+```yaml
+services:
+  nime-fetch:
+    image: gregoryesberci/nime-fetch:latest
+    container_name: nime-fetch
+    restart: unless-stopped
+    volumes:
+      - /path/to/downloads:/downloads
+      - /path/to/database:/database
+```
 
 ## Commands
 
@@ -31,40 +81,28 @@ yarn lint       # Run ESLint
 yarn checktypes # Type check with TypeScript
 ```
 
-### Build and Run
-
-```bash
-yarn build
-yarn start
-```
-
 ### Database
 
 Uses [drizzle-kit](https://orm.drizzle.team/docs/kit-overview).
 
 ```bash
-yarn db:generate
 yarn db:migrate
-yarn db:drop
 yarn db:studio
 ```
 
 ## Environment Variables
 
-| Variable       | Default       | Description                      |
-| -------------- | ------------- | -------------------------------- |
-| `API_PORT`     | `3000`        | Port where the API runs          |
-| `DOWNLOAD_DIR` | `downloads/`  | Folder to store downloaded files |
-| `NODE_ENV`     | `development` | Environment mode                 |
+| Variable        | Default (Local)  | Default (Docker)          | Description                           |
+| --------------- | ---------------- | ------------------------- | ------------------------------------- |
+| `PORT`          | `3000`           | `3000`                    | Port where the API runs               |
+| `BASE_PATH`     | *(empty string)* | *(empty string)*          | Base path prefix (e.g. `/nime-fetch`) |
+| `DOWNLOAD_DIR`  | `downloads`      | `/downloads`              | Folder to store downloaded files      |
+| `DATABASE_PATH` | `nime-fetch.db`  | `/database/nime-fetch.db` | Path to SQLite database file          |
 
 ## Web Interface
 
 When running, the server exposes a web UI at the root path (e.g. `http://localhost:3000`).
 It lists all animes and their episodes, along with download statuses.
-
-## Build Output
-
-Compiled files are stored in the `dist/` directory.
 
 ## License
 
