@@ -35,14 +35,10 @@
       <div
         x-show="confirmModal.visible"
         class="modal-overlay"
-        x-transition:enter="modal-enter"
-        x-transition:enter-start="modal-enter-start"
-        x-transition:enter-end="modal-enter-end"
-        x-transition:leave="modal-leave"
-        x-transition:leave-start="modal-leave-start"
-        x-transition:leave-end="modal-leave-end"
+        x-transition.opacity.duration.300ms
         @click.self="if (!confirmModal.loading) cancelConfirmation()"
         x-cloak
+        x-effect="confirmModal.visible ? onModalShow() : onModalHide()"
       >
         <div class="modal-content">
           <div class="modal-header">

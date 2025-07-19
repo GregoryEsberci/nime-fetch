@@ -32,5 +32,39 @@ function createModalMixin() {
       this.confirmModal.episode = undefined;
       this.confirmModal.loading = false;
     },
+
+    getScrollbarWidth() {
+      if (document.body.scrollHeight <= window.innerHeight) return 0;
+
+      const outer = document.createElement('div');
+      outer.style.visibility = 'hidden';
+      outer.style.overflow = 'scroll';
+      outer.style.msOverflowStyle = 'scrollbar';
+
+      document.body.appendChild(outer);
+
+      const inner = document.createElement('div');
+      outer.appendChild(inner);
+
+      const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+
+      outer.parentNode.removeChild(outer);
+
+      return scrollbarWidth;
+    },
+
+    onModalShow() {
+      document.body.classList.add('overflow-hidden');
+      document.body.style.paddingRight = `${this.getScrollbarWidth()}px`;
+    },
+
+    onModalHide() {
+      const TRANSITION_DURATION = 300;
+
+      setTimeout(() => {
+        document.body.classList.remove('overflow-hidden');
+        document.body.style.paddingRight = 0;
+      }, TRANSITION_DURATION);
+    },
   };
 }

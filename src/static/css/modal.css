@@ -84,30 +84,6 @@
   background: var(--color-danger-hover);
 }
 
-.modal-enter {
-  transition: all 0.3s ease-out;
-}
-
-.modal-enter-start {
-  opacity: 0;
-}
-
-.modal-enter-end {
-  opacity: 1;
-}
-
-.modal-leave {
-  transition: all 0.3s ease-in;
-}
-
-.modal-leave-start {
-  opacity: 1;
-}
-
-.modal-leave-end {
-  opacity: 0;
-}
-
 .loading-spinner {
   width: 1rem;
   height: 1rem;
