@@ -1,4 +1,4 @@
-import { eq, ne } from 'drizzle-orm';
+import { and, eq, ne, notInArray } from 'drizzle-orm';
 import { downloadedFileRepository } from './db/repositories/downloaded-file';
 import downloadedFileSchema, {
   DownloadedFile,
@@ -66,9 +66,10 @@ const download = async (downloadFile: DownloadedFile) => {
 };
 
 const process = async () => {
-  logger.log(`Processing downloads`);
+  logger.log(`Start process`);
 
   const promises = new Set<Promise<void>>();
+  const processingIds = new Set<number>();
 
   do {
     if (promises.size) {
@@ -77,24 +78,49 @@ const process = async () => {
 
     const batchSize = DOWNLOAD_BATCH_SIZE - promises.size;
 
+    const conditions = [ne(downloadedFileSchema.status, 'done')];
+
+    if (processingIds.size > 0) {
+      conditions.push(notInArray(downloadedFileSchema.id, [...processingIds]));
+    }
+
     downloadedFileRepository
       .select()
-      .where(ne(downloadedFileSchema.status, 'done'))
+      .where(and(...conditions))
       .orderBy(downloadedFileSchema.attempts)
       .limit(batchSize)
       .all()
       .forEach((downloadFile) => {
         const promise = download(downloadFile);
+
         promises.add(promise);
-        promise.finally(() => promises.delete(promise));
+        processingIds.add(downloadFile.id);
+
+        promise.finally(() => {
+          promises.delete(promise);
+          processingIds.delete(downloadFile.id);
+        });
       });
   } while (promises.size > 0);
 
-  logger.log('Finished batch');
+  logger.log('Finished process');
+};
+
+const cleanup = () => {
+  logger.log('Start cleanup.');
+
+  const updated = downloadedFileRepository
+    .update({ status: 'pending' })
+    .where(eq(downloadedFileSchema.status, 'downloading'))
+    .run();
+
+  logger.log(`Finished cleanup, reset ${updated.changes} downloads.`);
 };
 
 const start = async () => {
   logger.log('Download worker started');
+
+  cleanup();
 
   while (true) {
     try {
