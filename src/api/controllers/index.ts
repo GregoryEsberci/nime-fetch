@@ -1,2 +1,2 @@
-import './list';
-import './url';
+import './anime';
+import './anime-episode';

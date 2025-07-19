@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ignore": ["src/static/index.html"],
+  "ext": "ts,js,html",
+  "exec": "tsx --inspect src/index.ts"
+}

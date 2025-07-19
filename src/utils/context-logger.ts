@@ -1,9 +1,18 @@
 import crypto from 'node:crypto';
+import { IncomingMessage } from 'node:http';
 
 class ContextLogger {
   #id = crypto.randomUUID();
 
-  constructor(public context: string) {}
+  public context: string;
+
+  constructor(initialized: IncomingMessage | string) {
+    if (initialized instanceof IncomingMessage) {
+      this.context = `${initialized.method ?? ''} ${initialized.url ?? ''}`;
+    } else {
+      this.context = initialized;
+    }
+  }
 
   #formatMessage(message: string) {
     return `[${this.context}] [${this.#id}] ${message}`;

@@ -1,6 +1,5 @@
 import path from 'node:path';
 import ApiError from '../utils/api-error';
-import sleep from '../utils/sleep';
 import Scraper, { ScrapedAnime, ScrapedAnimeEpisode } from './base';
 import ContextLogger from '../utils/context-logger';
 
@@ -80,8 +79,6 @@ class AnimeFirePlusScraper extends Scraper {
       const episode = episodeLinks[index];
       const order = index + 1;
       this.logger.log(`Processing episode ${index + 1}: ${episode.href}`);
-
-      await sleep(500);
 
       const pageUrl = episode.href;
       const downloadUrl = await this.#getDownloadUrl(pageUrl);

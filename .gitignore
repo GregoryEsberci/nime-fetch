@@ -135,8 +135,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# drizzle
 nime-fetch.db
+.DS_Store
 
 /downloads
 /src/static/index.html

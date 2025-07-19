@@ -1,42 +1,174 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="color-scheme" content="dark">
+    <title>Anime download</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{BASE_PATH}}/favicon.ico"
+    >
 
-  <title>Anime download</title>
-  <link rel="icon" type="image/x-icon" href="{{BASE_PATH}}/favicon.ico">
-  </link>
+    <link rel="stylesheet" href="{{BASE_PATH}}/modern-normalize.css">
+    <link rel="stylesheet" href="{{BASE_PATH}}/css/styles.css">
+    <link rel="stylesheet" href="{{BASE_PATH}}/css/anime.css">
+    <link rel="stylesheet" href="{{BASE_PATH}}/css/toast.css">
+    <link rel="stylesheet" href="{{BASE_PATH}}/css/modal.css">
 
-  <link rel="stylesheet" href="{{BASE_PATH}}/modern-normalize.css">
-  <link rel="stylesheet" href="{{BASE_PATH}}/styles.css">
+    <script>
+      window.BASE_PATH = '{{BASE_PATH}}';
+    </script>
+    <script defer src="{{BASE_PATH}}/js/toast.js"></script>
+    <script defer src="{{BASE_PATH}}/js/modal.js"></script>
+    <script defer src="{{BASE_PATH}}/js/index.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
 
-  <script>
-    window.BASE_PATH = "{{BASE_PATH}}"
-  </script>
-  <script src="{{BASE_PATH}}/main.js" defer></script>
-</head>
-
-<body>
-  <header>
-    <h1>NimeFetch</h1>
-  </header>
-
-  <main>
-    <form id="url-form">
-      <div class="input-container">
-        <input type="url" name="url" required placeholder="Enter anime URL...">
-        <p class="error-message"></p>
+  <body>
+    <div x-data="animeApp()">
+      <div
+        x-show="confirmModal.visible"
+        class="modal-overlay"
+        x-transition:enter="modal-enter"
+        x-transition:enter-start="modal-enter-start"
+        x-transition:enter-end="modal-enter-end"
+        x-transition:leave="modal-leave"
+        x-transition:leave-start="modal-leave-start"
+        x-transition:leave-end="modal-leave-end"
+        @click.self="if (!confirmModal.loading) cancelConfirmation()"
+        x-cloak
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Confirm Deletion</h3>
+          </div>
+          <div class="modal-body">
+            <p x-text="confirmModal.message"></p>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="button-secondary"
+              @click="cancelConfirmation()"
+              :disabled="confirmModal.loading"
+            >
+              Cancel
+            </button>
+            <button
+              class="button-danger"
+              @click="confirmDeletion()"
+              :disabled="confirmModal.loading"
+            >
+              <span x-show="!confirmModal.loading">Delete</span>
+              <span x-show="confirmModal.loading" class="loading-spinner"></span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <button type="submit">Download</button>
-    </form>
+      <div id="toast-container" class="toast-container">
+        <div
+          x-show="toast.visible"
+          x-transition:enter="toast-enter"
+          x-transition:enter-start="toast-enter-start"
+          x-transition:enter-end="toast-enter-end"
+          x-transition:leave="toast-leave"
+          x-transition:leave-start="toast-leave-start"
+          x-transition:leave-end="toast-leave-end"
+          class="toast"
+          :class="`toast-${toast.type}`"
+          x-cloak
+        >
+          <div class="toast-content">
+            <div class="toast-icon" x-html="toast.icon"></div>
+            <span x-text="toast.message"></span>
+          </div>
+        </div>
+      </div>
 
-    <div id="anime-list">
+      <header>
+        <h1>NimeFetch</h1>
+      </header>
+
+      <main>
+        <form @submit.prevent="submitUrl">
+          <div class="input-container">
+            <input
+              type="url"
+              name="url"
+              required
+              placeholder="Enter anime URL..."
+              x-model="url"
+              :disabled="isSubmittingUrl"
+              :class="{ 'input-error': errorMessage }"
+            >
+            <p class="error-message" x-text="errorMessage"></p>
+          </div>
+
+          <button type="submit" :disabled="isSubmittingUrl">
+            <span x-text="isSubmittingUrl ? 'Adding...' : 'Download'"></span>
+          </button>
+        </form>
+
+        <template x-for="anime in animeList" :key="anime.id">
+          <div class="anime-container">
+            <section class="anime">
+              <div class="anime-header">
+                <h2 x-text="anime.title"></h2>
+
+                <button
+                  class="deletion-button"
+                  @click="showDeleteAnimeConfirmation(anime)"
+                  x-html="icons.trash"
+                ></button>
+              </div>
+              <template x-for="episode in anime.episodes" :key="episode.id">
+                <div class="episode">
+                  <div class="episode-content">
+                    <span x-text="episode.title"></span>
+
+                    <span
+                      :class="`status status-${episode.fileStatus}`"
+                      x-text="getStatusText(episode)"
+                      x-show="getStatusText(episode)"
+                    ></span>
+                  </div>
+
+                  <div class="actions">
+                    <a
+                      :href="episode.filePath"
+                      class="link-icon"
+                      :class="{ 'disabled': episode.fileStatus !== 'done' }"
+                      target="_blank"
+                      @click="if (episode.fileStatus !== 'done') $event.preventDefault()"
+                      x-html="icons.arrowTopRightOnSquare"
+                    ></a>
+                    <a
+                      :href="episode.filePath"
+                      class="link-icon"
+                      :class="{ 'disabled': episode.fileStatus !== 'done' }"
+                      target="_blank"
+                      download
+                      @click="if (episode.fileStatus !== 'done') $event.preventDefault()"
+                      x-html="icons.arrowDownTray"
+                    ></a>
+                    <button
+                      class="deletion-button"
+                      @click="showDeleteEpisodeConfirmation(anime, episode)"
+                      x-html="icons.trash"
+                    ></button>
+                  </div>
+                </div>
+              </template>
+            </section>
+          </div>
+        </template>
+      </main>
     </div>
-  </main>
-</body>
-
+  </body>
 </html>

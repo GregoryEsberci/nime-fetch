@@ -14,7 +14,6 @@ import { dirname, join } from 'node:path';
 import { DOWNLOAD_DIR } from './utils/constants';
 
 const LOOP_INTERVAL = 5000;
-const MAX_PEER_LOOP = 50;
 const DOWNLOAD_BATCH_SIZE = 5;
 
 const logger = new ContextLogger('DownloaderWorker');
@@ -66,50 +65,32 @@ const download = async (downloadFile: DownloadedFile) => {
   }
 };
 
-const process = async (downloadFiles: DownloadedFile[]) => {
-  logger.log(`Processing ${downloadFiles.length} download(s)`);
+const process = async () => {
+  logger.log(`Processing downloads`);
 
-  const pending = [...downloadFiles];
   const promises = new Set<Promise<void>>();
 
-  while (pending.length > 0) {
+  do {
     if (promises.size) {
       await Promise.race(promises);
     }
 
-    const batchSize = Math.min(
-      DOWNLOAD_BATCH_SIZE - promises.size,
-      pending.length,
-    );
+    const batchSize = DOWNLOAD_BATCH_SIZE - promises.size;
 
-    for (let i = 0; i < batchSize; i++) {
-      const downloadFile = pending.shift();
-      if (!downloadFile) break;
-
-      const promise = download(downloadFile);
-      promises.add(promise);
-      promise.finally(() => promises.delete(promise));
-    }
-  }
-
-  await Promise.all(promises);
+    downloadedFileRepository
+      .select()
+      .where(ne(downloadedFileSchema.status, 'done'))
+      .orderBy(downloadedFileSchema.attempts)
+      .limit(batchSize)
+      .all()
+      .forEach((downloadFile) => {
+        const promise = download(downloadFile);
+        promises.add(promise);
+        promise.finally(() => promises.delete(promise));
+      });
+  } while (promises.size > 0);
 
   logger.log('Finished batch');
-};
-
-const run = async () => {
-  const downloadFiles = downloadedFileRepository
-    .select()
-    .where(ne(downloadedFileSchema.status, 'done'))
-    .orderBy(downloadedFileSchema.attempts)
-    .limit(MAX_PEER_LOOP)
-    .all();
-
-  if (downloadFiles.length) {
-    logger.log(`Fetched ${downloadFiles.length} file(s) to download`);
-  }
-
-  if (downloadFiles.length) await process(downloadFiles);
 };
 
 const start = async () => {
@@ -117,7 +98,7 @@ const start = async () => {
 
   while (true) {
     try {
-      await run();
+      await process();
     } catch (error) {
       logger.error('Global error', error);
     } finally {

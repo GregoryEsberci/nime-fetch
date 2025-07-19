@@ -16,7 +16,7 @@
     "checktypes": "tsc --noEmit",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "yarn drizzle-kit studio",
-    "dev": "NODE_ENV=development nodemon --watch src --exec tsx --inspect src/index.ts",
+    "dev": "NODE_ENV=development nodemon",
     "lint": "eslint .",
     "test": "NODE_ENV=test node --test"
   },
@@ -31,7 +31,9 @@
     "mime": "^4.0.7"
   },
   "devDependencies": {
+    "@eslint/css": "^0.10.0",
     "@eslint/js": "^9.30.0",
+    "@html-eslint/eslint-plugin": "^0.42.0",
     "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.3",
     "@types/jest-when": "^3.5.5",

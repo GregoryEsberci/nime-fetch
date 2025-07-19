@@ -9,6 +9,11 @@ router.use(express.json());
 app.enable('trust proxy');
 app.use(BASE_PATH, router);
 
-app.listen(PORT, () =>
-  console.log(`Listening on http://localhost:${PORT}/${BASE_PATH}`),
-);
+app
+  .listen(PORT, () =>
+    console.log(`Listening on http://localhost:${PORT}/${BASE_PATH}`),
+  )
+  .on('error', (error) => {
+    console.error(error);
+    process.exit(1);
+  });

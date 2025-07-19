@@ -38,12 +38,10 @@ const registerAnimeFromUrl = async (url: string) => {
   );
   contextLogger.log(`Scraped "${scrapedAnimeEpisodes.length}" episodes`);
 
-  return sqliteDb.transaction((transaction) => {
-    const animeRepository = new AnimeRepository({ transaction });
-    const downloadedFileRepository = new DownloadedFileRepository({
-      transaction,
-    });
-    const animeEpisodeRepository = new AnimeEpisodeRepository({ transaction });
+  return sqliteDb.transaction((tx) => {
+    const animeRepository = new AnimeRepository(tx);
+    const downloadedFileRepository = new DownloadedFileRepository(tx);
+    const animeEpisodeRepository = new AnimeEpisodeRepository(tx);
 
     const anime = animeRepository
       .create({

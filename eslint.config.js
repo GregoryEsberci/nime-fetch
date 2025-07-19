@@ -3,6 +3,8 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import tsEslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import globals from 'globals';
+import html from '@html-eslint/eslint-plugin';
+import css from '@eslint/css';
 
 export default defineConfig([
   eslint.configs.recommended,
@@ -17,12 +19,27 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/static/**'],
+    files: ['src/static/**/*.js'],
     languageOptions: {
       globals: {
         BASE_PATH: 'readonly',
         ...globals.browser,
       },
     },
+  },
+  {
+    ...html.configs['flat/recommended'],
+    files: ['**/*.html'],
+    rules: {
+      ...html.configs['flat/recommended'].rules,
+      '@html-eslint/indent': ['error', 2],
+      'prettier/prettier': 'off',
+    },
+  },
+  {
+    files: ['**/*.css'],
+    language: 'css/css',
+    plugins: { css },
+    extends: ['css/recommended'],
   },
 ]);

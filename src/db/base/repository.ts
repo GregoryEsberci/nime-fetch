@@ -10,26 +10,10 @@ import Database from 'better-sqlite3';
 import { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import { now } from '../../utils/db';
 
-type Transaction = Parameters<
-  Parameters<(typeof sqliteDb)['transaction']>[0]
->[0];
-
-interface Options {
-  transaction?: Transaction;
-}
-
 export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {
   abstract readonly schema: T;
 
-  protected transaction?: Transaction;
-
-  constructor(options: Options = {}) {
-    this.transaction = options.transaction;
-  }
-
-  private get db(): BetterSQLite3Database {
-    return this.transaction || sqliteDb;
-  }
+  constructor(public db: BetterSQLite3Database = sqliteDb) {}
 
   select<T extends SelectedFields | undefined = undefined>(fields?: T) {
     const select: SQLiteSelectBuilder<T, 'sync', Database.RunResult, 'db'> =

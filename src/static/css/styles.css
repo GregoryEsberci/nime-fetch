@@ -8,7 +8,10 @@
   --color-status-bg: #3f3f46;
   --color-error-bg: #7f1d1d;
   --color-error-text: #fecaca;
-
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
   --radius: 6px;
   --max-width: 64rem;
   --spacing: 1rem;
@@ -19,6 +22,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+[x-cloak] {
+  display: none !important;
 }
 
 body {
@@ -140,61 +147,11 @@ form button:hover {
   background: var(--color-primary-hover);
 }
 
-.anime {
-  background: var(--color-surface);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  padding: 1rem 0;
-  margin-bottom: 1.5rem;
-}
-
-.anime-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
-}
-
-.anime-header h2 {
-  font-size: var(--font-size-lg);
-  font-weight: 600;
-  margin: 0 0.25em;
-}
-
-.download-all {
-  background: var(--color-primary);
-  color: white;
-  font-size: var(--font-size-sm);
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.download-all:hover {
-  background: var(--color-primary-hover);
-}
-
-.download-button {
-  background: var(--color-primary);
-  color: white;
-  font-size: var(--font-size-sm);
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
-.download-button:hover {
-  background: var(--color-primary-hover);
-}
-
 .status {
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
   border-radius: 3px;
   margin-left: var(--spacing);
-  margin-right: auto;
 }
 
 .status-pending {
@@ -210,42 +167,4 @@ form button:hover {
 .status-error {
   background: var(--color-error-bg);
   color: var(--color-error-text);
-}
-
-.episodes {
-  margin-top: 1rem;
-  padding: 0 1rem;
-  max-height: 15rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.episode {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.5rem;
-  border-top: 1px solid #3f3f46;
-  font-size: var(--font-size-sm);
-}
-
-.link-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  background: transparent;
-  border: none;
-  color: var(--color-primary);
-  padding: 0.5rem;
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.link-icon:hover {
-  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
 }
