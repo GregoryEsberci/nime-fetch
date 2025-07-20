@@ -9,6 +9,8 @@ import path from 'node:path';
 import ContextLogger from '../utils/context-logger';
 import sanitizeFileName from '../utils/sanitize-file-name';
 import httpStatusCodes from '../utils/http-status-codes';
+import { eq } from 'drizzle-orm';
+import animeSchema from '../db/schemas/anime';
 
 const registerAnimeFromUrl = async (url: string) => {
   const contextLogger = new ContextLogger('registerAnimeFromUrl');
@@ -47,12 +49,17 @@ const registerAnimeFromUrl = async (url: string) => {
       .create({
         pageUrl: scrapedAnime.pageUrl,
         title: scrapedAnime.title,
+        folderName: '',
       })
       .returning()
       .get();
 
+    animeRepository
+      .update({ folderName: sanitizeFileName(`${anime.title}-${anime.id}`) })
+      .where(eq(animeSchema.id, anime.id))
+      .run();
+
     contextLogger.log(`Anime created with id "${anime.id}"`);
-    const animeDirName = sanitizeFileName(`${anime.title}-${anime.id}`);
 
     const episodeInserts = scrapedAnimeEpisodes.map(
       (episode): AnimeEpisodeInsert => {
@@ -60,7 +67,7 @@ const registerAnimeFromUrl = async (url: string) => {
           .create({
             downloadUrl: episode.downloadUrl,
             status: 'pending',
-            path: path.join(animeDirName, episode.fileName),
+            path: path.join(anime.folderName, episode.fileName),
           })
           .returning()
           .get();
@@ -71,6 +78,7 @@ const registerAnimeFromUrl = async (url: string) => {
           animeId: anime.id,
           downloadedFileId: downloadedFile.id,
           title: episode.title,
+          fileName: episode.fileName,
         };
       },
     );

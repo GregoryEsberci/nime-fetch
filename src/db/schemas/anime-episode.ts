@@ -8,6 +8,7 @@ const animeEpisodeSchema = sqliteTable('anime_episodes', {
   pageUrl: text(),
   title: text().notNull(),
   order: integer().notNull(),
+  fileName: text().notNull(),
   animeId: integer()
     .notNull()
     .references(() => animeSchema.id, { onDelete: 'cascade' }),

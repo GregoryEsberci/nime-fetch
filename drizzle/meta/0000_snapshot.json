@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "16bd6668-f15f-4aab-af3b-61b5a5f01fed",
+  "id": "583b1d7f-f6c1-4893-bfd4-995a7c83fd0c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "anime_episodes": {
@@ -31,6 +31,13 @@
         "order": {
           "name": "order",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "fileName": {
+          "name": "fileName",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -121,6 +128,13 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false,
+          "autoincrement": false
+        },
+        "folderName": {
+          "name": "folderName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         },
         "createdAt": {

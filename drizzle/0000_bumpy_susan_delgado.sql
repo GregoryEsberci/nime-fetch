@@ -3,6 +3,7 @@ CREATE TABLE `anime_episodes` (
 	`pageUrl` text,
 	`title` text NOT NULL,
 	`order` integer NOT NULL,
+	`fileName` text NOT NULL,
 	`animeId` integer NOT NULL,
 	`downloadedFileId` integer NOT NULL,
 	`createdAt` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
@@ -15,6 +16,7 @@ CREATE TABLE `animes` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
 	`pageUrl` text,
+	`folderName` text NOT NULL,
 	`createdAt` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
 	`updatedAt` integer DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );

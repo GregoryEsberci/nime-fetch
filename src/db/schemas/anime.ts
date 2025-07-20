@@ -5,6 +5,7 @@ const animeSchema = sqliteTable('animes', {
   id: idColumn,
   title: text().notNull(),
   pageUrl: text(),
+  folderName: text().notNull(),
   ...timestampsColumns,
 });
 
