@@ -1,6 +1,6 @@
 import { animeRepository } from '../db/repositories/anime';
 import animeSchema from '../db/schemas/anime';
-import animeEpisodeSchema from '../db/schemas/anime-episode';
+import animeEpisodeSchema, { AnimeEpisode } from '../db/schemas/anime-episode';
 import downloadedFileSchema, {
   DownloadedFile,
 } from '../db/schemas/downloaded-file';
@@ -17,9 +17,11 @@ interface AnimeListItem {
     title: string;
     createdAt: Date;
     updatedAt: Date;
-    filePath: string;
+    filePath: string | undefined;
     fileStatus: DownloadedFile['status'];
     downloadAttempts: number;
+    status: AnimeEpisode['status'];
+    attempts: number;
   }[];
 }
 
@@ -36,6 +38,8 @@ export default class AnimeService {
         episodeCreatedAt: animeEpisodeSchema.createdAt,
         episodeUpdatedAt: animeEpisodeSchema.updatedAt,
         episodeOrder: animeEpisodeSchema.order,
+        episodeStatus: animeEpisodeSchema.status,
+        episodeAttempts: animeEpisodeSchema.attempts,
         episodeDownloadPath: downloadedFileSchema.path,
         episodeDownloadStatus: downloadedFileSchema.status,
         episodeDownloadAttempts: downloadedFileSchema.attempts,
@@ -66,12 +70,16 @@ export default class AnimeService {
         if (row.episodeId) {
           acc[row.animeId].episodes.push({
             id: row.episodeId,
-            title: row.episodeTitle!,
-            createdAt: row.episodeCreatedAt!,
-            updatedAt: row.episodeUpdatedAt!,
-            filePath: path.join('downloads', row.episodeDownloadPath!),
-            fileStatus: row.episodeDownloadStatus!,
-            downloadAttempts: row.episodeDownloadAttempts!,
+            title: row.episodeTitle ?? '',
+            createdAt: row.episodeCreatedAt ?? new Date(),
+            updatedAt: row.episodeUpdatedAt ?? new Date(),
+            filePath: row.episodeDownloadPath
+              ? path.join('downloads', row.episodeDownloadPath)
+              : undefined,
+            fileStatus: row.episodeDownloadStatus || 'pending',
+            downloadAttempts: row.episodeDownloadAttempts ?? 0,
+            status: row.episodeStatus || 'pending',
+            attempts: row.episodeAttempts ?? 0,
           });
         }
 

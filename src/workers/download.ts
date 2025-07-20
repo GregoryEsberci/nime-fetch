@@ -1,37 +1,21 @@
 import { and, eq, ne, notInArray } from 'drizzle-orm';
-import { downloadedFileRepository } from './db/repositories/downloaded-file';
+import { downloadedFileRepository } from '../db/repositories/downloaded-file';
 import downloadedFileSchema, {
   DownloadedFile,
-} from './db/schemas/downloaded-file';
-import sleep from './utils/sleep';
+} from '../db/schemas/downloaded-file';
+import sleep from '../utils/sleep';
 import stream from 'node:stream/promises';
 import fs from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
-import { increment } from './utils/db';
-import { SQLiteUpdateSetSource } from 'drizzle-orm/sqlite-core';
-import ContextLogger from './utils/context-logger';
+import { increment } from '../utils/db';
+import ContextLogger from '../utils/context-logger';
 import { dirname, join } from 'node:path';
-import { DOWNLOAD_DIR } from './utils/constants';
+import { DOWNLOAD_DIR } from '../utils/constants';
 
 const LOOP_INTERVAL = 5000;
 const DOWNLOAD_BATCH_SIZE = 5;
 
 const logger = new ContextLogger('DownloaderWorker');
-
-const updateDownloadFile = (
-  id: number,
-  data: SQLiteUpdateSetSource<typeof downloadedFileSchema>,
-) => {
-  try {
-    downloadedFileRepository
-      .update(data)
-      .where(eq(downloadedFileSchema.id, id))
-      .run();
-  } catch (error) {
-    logger.error('update error', error);
-    throw error;
-  }
-};
 
 const download = async (downloadFile: DownloadedFile) => {
   logger.log(`Starting download from "${downloadFile.downloadUrl}"`);
@@ -44,13 +28,15 @@ const download = async (downloadFile: DownloadedFile) => {
 
     const fullPath = join(DOWNLOAD_DIR, downloadFile.path);
 
-    updateDownloadFile(downloadFile.id, { status: 'downloading' });
+    downloadedFileRepository.updateById(downloadFile.id, {
+      status: 'downloading',
+    });
 
     await fs.mkdir(dirname(fullPath), { recursive: true });
 
     await stream.pipeline(response.body, createWriteStream(fullPath));
 
-    updateDownloadFile(downloadFile.id, {
+    downloadedFileRepository.updateById(downloadFile.id, {
       status: 'done',
       attempts: increment(downloadedFileSchema.attempts),
     });
@@ -58,7 +44,7 @@ const download = async (downloadFile: DownloadedFile) => {
   } catch (error) {
     logger.error('Download failed', error);
 
-    updateDownloadFile(downloadFile.id, {
+    downloadedFileRepository.updateById(downloadFile.id, {
       status: 'error',
       attempts: increment(downloadedFileSchema.attempts),
     });
@@ -117,7 +103,7 @@ const cleanup = () => {
   logger.log(`Finished cleanup, reset ${updated.changes} downloads.`);
 };
 
-const start = async () => {
+const startDownloadWorker = async () => {
   logger.log('Download worker started');
 
   cleanup();
@@ -133,4 +119,4 @@ const start = async () => {
   }
 };
 
-start();
+export default startDownloadWorker;

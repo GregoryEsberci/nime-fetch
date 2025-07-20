@@ -149,13 +149,31 @@ function animeApp() {
     },
 
     getStatusText(episode) {
-      const statusMap = {
-        pending: 'Pending',
+      const fileStatusMap = {
+        pending: 'Download pending',
         downloading: 'Downloading',
-        error: `Error - ${episode.downloadAttempts} attempts`,
+        error: `Download error - ${episode.downloadAttempts} attempts`,
       };
 
-      return statusMap[episode.fileStatus] || '';
+      const statusMap = {
+        pending: 'Process pending',
+        scraping: 'Processing',
+        error: `Process error - ${episode.attempts} attempts`,
+      };
+
+      if (episode.status !== 'done') {
+        return statusMap[episode.status];
+      }
+
+      return fileStatusMap[episode.fileStatus] || '';
+    },
+
+    getStatusClass(episode) {
+      if (episode.status !== 'done') {
+        return episode.status;
+      }
+
+      return episode.fileStatus;
     },
 
     startPolling() {

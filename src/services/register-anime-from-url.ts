@@ -2,10 +2,8 @@ import { findScraperByUrl } from '../scrapers/index';
 import sqliteDb from '../db/base/sqlite';
 import AnimeRepository from '../db/repositories/anime';
 import AnimeEpisodeRepository from '../db/repositories/anime-episode';
-import DownloadedFileRepository from '../db/repositories/downloaded-file';
 import { AnimeEpisodeInsert } from '../db/schemas/anime-episode';
 import ApiError from '../utils/api-error';
-import path from 'node:path';
 import ContextLogger from '../utils/context-logger';
 import sanitizeFileName from '../utils/sanitize-file-name';
 import httpStatusCodes from '../utils/http-status-codes';
@@ -42,7 +40,6 @@ const registerAnimeFromUrl = async (url: string) => {
 
   return sqliteDb.transaction((tx) => {
     const animeRepository = new AnimeRepository(tx);
-    const downloadedFileRepository = new DownloadedFileRepository(tx);
     const animeEpisodeRepository = new AnimeEpisodeRepository(tx);
 
     const anime = animeRepository
@@ -63,22 +60,11 @@ const registerAnimeFromUrl = async (url: string) => {
 
     const episodeInserts = scrapedAnimeEpisodes.map(
       (episode): AnimeEpisodeInsert => {
-        const downloadedFile = downloadedFileRepository
-          .create({
-            downloadUrl: episode.downloadUrl,
-            status: 'pending',
-            path: path.join(anime.folderName, episode.fileName),
-          })
-          .returning()
-          .get();
-
         return {
           pageUrl: episode.pageUrl,
           order: episode.order,
           animeId: anime.id,
-          downloadedFileId: downloadedFile.id,
           title: episode.title,
-          fileName: episode.fileName,
         };
       },
     );

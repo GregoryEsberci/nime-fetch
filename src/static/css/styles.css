@@ -164,6 +164,11 @@ form button:hover {
   color: black;
 }
 
+.status-scraping {
+  background: #22c55e;
+  color: black;
+}
+
 .status-error {
   background: var(--color-error-bg);
   color: var(--color-error-text);

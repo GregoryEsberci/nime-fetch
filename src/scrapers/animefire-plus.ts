@@ -1,4 +1,3 @@
-import path from 'node:path';
 import ApiError from '../utils/api-error';
 import Scraper, { ScrapedAnime, ScrapedAnimeEpisode } from './base';
 import ContextLogger from '../utils/context-logger';
@@ -10,7 +9,7 @@ class AnimeFirePlusScraper extends Scraper {
     return url.startsWith('https://animefire.plus/animes');
   }
 
-  async #getDownloadUrl(episodeUrl: string): Promise<string> {
+  async getDownloadUrl(episodeUrl: string): Promise<string> {
     this.logger.log(`Fetching download URL for episode: ${episodeUrl}`);
 
     const document = await this.fetchDocument(episodeUrl);
@@ -65,7 +64,6 @@ class AnimeFirePlusScraper extends Scraper {
     this.logger.log('Fetching anime episodes...');
 
     const animePage = await this.getAnimePage();
-    const anime = await this.getAnime();
 
     const episodeLinks = Array.from(
       animePage.querySelectorAll<HTMLAnchorElement>('.div_video_list a'),
@@ -81,17 +79,11 @@ class AnimeFirePlusScraper extends Scraper {
       this.logger.log(`Processing episode ${index + 1}: ${episode.href}`);
 
       const pageUrl = episode.href;
-      const downloadUrl = await this.#getDownloadUrl(pageUrl);
-      let fileName =
-        (await this.fetchFileName(downloadUrl)) ||
-        `${anime.title}-(${index + 1}).mp4`;
-      fileName = fileName.replace('[AnimeFire.plus]', '');
+      const title = episode.textContent || `Episode ${order}`;
 
-      const title = path.basename(fileName, path.extname(fileName));
+      this.logger.log(`Episode ${title}`);
 
-      this.logger.log(`Episode ${order} fileName: ${fileName}`);
-
-      result.push({ pageUrl, downloadUrl, order, fileName, title });
+      result.push({ pageUrl, order, title });
     }
 
     this.logger.log('Finished fetching episodes');

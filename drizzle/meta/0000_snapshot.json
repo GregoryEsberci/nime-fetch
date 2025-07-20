@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "583b1d7f-f6c1-4893-bfd4-995a7c83fd0c",
+  "id": "403dfe0e-11c8-43a8-b3dd-8f18ad65f663",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "anime_episodes": {
@@ -18,7 +18,7 @@
           "name": "pageUrl",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "title": {
@@ -39,8 +39,24 @@
           "name": "fileName",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'pending'"
+        },
+        "attempts": {
+          "name": "attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
         },
         "animeId": {
           "name": "animeId",
@@ -53,7 +69,7 @@
           "name": "downloadedFileId",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "createdAt": {
@@ -127,7 +143,7 @@
           "name": "pageUrl",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "folderName": {
@@ -175,7 +191,8 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": "'pending'"
         },
         "path": {
           "name": "path",

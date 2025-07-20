@@ -129,7 +129,7 @@
                     <span x-text="episode.title"></span>
 
                     <span
-                      :class="`status status-${episode.fileStatus}`"
+                      :class="`status status-${getStatusClass(episode)}`"
                       x-text="getStatusText(episode)"
                       x-show="getStatusText(episode)"
                     ></span>

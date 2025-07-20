@@ -6,9 +6,7 @@ import httpStatusCodes from '../utils/http-status-codes';
 
 export interface ScrapedAnimeEpisode {
   pageUrl: string;
-  downloadUrl: string;
   order: number;
-  fileName: string;
   title: string;
 }
 
@@ -54,6 +52,8 @@ export default abstract class Scraper {
 
   abstract getAnimeEpisodes(): Promise<ScrapedAnimeEpisode[]>;
 
+  abstract getDownloadUrl(episodeUrl: string): Promise<string>;
+
   async #fetchHtml(url: string): Promise<string> {
     const response = await fetch(url);
 
@@ -73,34 +73,6 @@ export default abstract class Scraper {
   protected async fetchDocument(url: string): Promise<Document> {
     const html = await this.#fetchHtml(url);
     return new JSDOM(html).window.document;
-  }
-
-  protected decodeDispositionFilename(header: string) {
-    const match = header.match(
-      /filename\*=UTF-8''(.+)|filename="([^"]+)"|filename=(\S+)/i,
-    );
-
-    if (!match) return;
-
-    return decodeURIComponent(match[1] || match[2] || match[3]);
-  }
-
-  protected async fetchContentDisposition(url: string) {
-    const response = await fetch(url, { method: 'HEAD' });
-
-    if (!response.ok) {
-      throw new ApiError(`${response.statusText} on ${url}`);
-    }
-
-    return response.headers.get('content-disposition');
-  }
-
-  protected async fetchFileName(url: string) {
-    const contentDisposition = await this.fetchContentDisposition(url);
-
-    if (!contentDisposition) return;
-
-    return this.decodeDispositionFilename(contentDisposition);
   }
 }
 

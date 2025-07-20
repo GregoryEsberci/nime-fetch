@@ -1,3 +1,5 @@
 import './setup';
 import './api/index';
-import './download-worker';
+import startWorkers from './workers/index';
+
+startWorkers();

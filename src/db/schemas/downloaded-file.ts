@@ -3,7 +3,9 @@ import { idColumn, timestampsColumns } from '../base/column';
 
 const downloadedFileSchema = sqliteTable('download_files', {
   id: idColumn,
-  status: text({ enum: ['done', 'error', 'pending', 'downloading'] }).notNull(),
+  status: text({ enum: ['done', 'error', 'pending', 'downloading'] })
+    .notNull()
+    .default('pending'),
   path: text().notNull(),
   downloadUrl: text().notNull(),
   attempts: integer().default(0).notNull(),

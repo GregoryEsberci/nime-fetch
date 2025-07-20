@@ -9,6 +9,7 @@ import sqliteDb from './sqlite';
 import Database from 'better-sqlite3';
 import { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import { now } from '../../utils/db';
+import { eq } from 'drizzle-orm';
 
 export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {
   abstract readonly schema: T;
@@ -33,5 +34,11 @@ export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {
 
   delete() {
     return this.db.delete(this.schema);
+  }
+
+  updateById(id: number, data: SQLiteUpdateSetSource<T>) {
+    return this.update(data)
+      .where(eq((this.schema as any).id, id))
+      .run();
   }
 }

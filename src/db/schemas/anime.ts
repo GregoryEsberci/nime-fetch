@@ -4,7 +4,7 @@ import { idColumn, timestampsColumns } from '../base/column';
 const animeSchema = sqliteTable('animes', {
   id: idColumn,
   title: text().notNull(),
-  pageUrl: text(),
+  pageUrl: text().notNull(),
   folderName: text().notNull(),
   ...timestampsColumns,
 });
