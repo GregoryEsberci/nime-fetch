@@ -1,0 +1,13 @@
+services:
+  nime-fetch:
+    build: .
+    container_name: nime-fetch
+    restart: unless-stopped
+    user: "${PUID:-1000}:${PGID:-1000}"
+    volumes:
+      - ./downloads:/downloads
+      - ./database:/database
+    ports:
+      - 3000:3000
+
+

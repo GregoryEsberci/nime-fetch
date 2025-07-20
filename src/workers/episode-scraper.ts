@@ -7,7 +7,7 @@ import ContextLogger from '../utils/context-logger';
 import sleep from '../utils/sleep';
 import { animeRepository } from '../db/repositories/anime';
 import animeSchema from '../db/schemas/anime';
-import { findScraperByUrl } from '../scrapers';
+import { findScraperByUrl } from '../scrapers/index';
 import { ScraperClass } from '../scrapers/base';
 import sqliteDb from '../db/base/sqlite';
 import DownloadedFileRepository from '../db/repositories/downloaded-file';
