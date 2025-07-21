@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
 
-yarn swc src/**/* -d dist --strip-leading-paths --copy-files
+rm -rf dist
+yarn swc src/**/* src/* -d dist --strip-leading-paths --copy-files
 yarn tsx scripts/fix-imports.ts

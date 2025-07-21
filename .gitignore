@@ -139,4 +139,4 @@ nime-fetch.db
 .DS_Store
 
 /downloads
-/src/static/index.html
+/src/public/index.html

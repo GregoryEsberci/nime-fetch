@@ -88,7 +88,7 @@ const ignored = (filePath: string, stats?: Stats) => {
   if (!stats?.isFile()) return false;
 
   const isIgnored = filePath.includes(
-    path.join(SRC_DIR, 'static', 'index.html'),
+    path.join(SRC_DIR, 'public', 'index.html'),
   );
   const hasValidExt = ['.ts', '.js', '.html'].includes(path.extname(filePath));
 

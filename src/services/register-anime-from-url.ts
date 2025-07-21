@@ -1,14 +1,14 @@
 import { findScraperByUrl } from '@/scrapers/index';
-import sqliteDb from '@/db/base/sqlite';
-import AnimeRepository from '@/db/repositories/anime';
-import AnimeEpisodeRepository from '@/db/repositories/anime-episode';
-import { AnimeEpisodeInsert } from '@/db/schemas/anime-episode';
+import database from '@/database/connection';
+import AnimeRepository from '@/database/repositories/anime';
+import AnimeEpisodeRepository from '@/database/repositories/anime-episode';
+import { AnimeEpisodeInsert } from '@/database/schemas/anime-episode';
 import ApiError from '@/utils/api-error';
 import ContextLogger from '@/utils/context-logger';
 import sanitizeFileName from '@/utils/sanitize-file-name';
 import httpStatusCodes from '@/utils/http-status-codes';
 import { eq } from 'drizzle-orm';
-import animeSchema from '@/db/schemas/anime';
+import animeSchema from '@/database/schemas/anime';
 
 const registerAnimeFromUrl = async (url: string) => {
   const contextLogger = new ContextLogger('registerAnimeFromUrl');
@@ -38,7 +38,7 @@ const registerAnimeFromUrl = async (url: string) => {
   );
   contextLogger.log(`Scraped "${scrapedAnimeEpisodes.length}" episodes`);
 
-  return sqliteDb.transaction((tx) => {
+  return database.transaction((tx) => {
     const animeRepository = new AnimeRepository(tx);
     const animeEpisodeRepository = new AnimeEpisodeRepository(tx);
 

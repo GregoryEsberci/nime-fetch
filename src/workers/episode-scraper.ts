@@ -1,16 +1,18 @@
 import { and, eq, exists, ne } from 'drizzle-orm';
 import AnimeEpisodeRepository, {
   animeEpisodeRepository,
-} from '@/db/repositories/anime-episode';
-import animeEpisodeSchema, { AnimeEpisode } from '@/db/schemas/anime-episode';
+} from '@/database/repositories/anime-episode';
+import animeEpisodeSchema, {
+  AnimeEpisode,
+} from '@/database/schemas/anime-episode';
 import ContextLogger from '@/utils/context-logger';
 import sleep from '@/utils/sleep';
-import { animeRepository } from '@/db/repositories/anime';
-import animeSchema from '@/db/schemas/anime';
+import { animeRepository } from '@/database/repositories/anime';
+import animeSchema from '@/database/schemas/anime';
 import { findScraperByUrl } from '@/scrapers/index';
 import { ScraperClass } from '@/scrapers/base';
-import sqliteDb from '@/db/base/sqlite';
-import DownloadedFileRepository from '@/db/repositories/downloaded-file';
+import database from '@/database/connection';
+import DownloadedFileRepository from '@/database/repositories/downloaded-file';
 import path from 'node:path';
 import sanitizeFileName from '@/utils/sanitize-file-name';
 
@@ -59,7 +61,7 @@ const processEpisode = async ({
     (await fetchFileName(downloadUrl)) ?? `${episode.title}.mp4`,
   );
 
-  sqliteDb.transaction((tx) => {
+  database.transaction((tx) => {
     const animeEpisodeRepositoryTx = new AnimeEpisodeRepository(tx);
     const downloadedFileRepositoryTx = new DownloadedFileRepository(tx);
 

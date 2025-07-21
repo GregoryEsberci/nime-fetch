@@ -1,6 +1,6 @@
 {
   "watch": ["src"],
-  "ignore": ["src/static/index.html"],
+  "ignore": ["src/public/index.html"],
   "ext": "ts,js,html",
   "exec": "tsx --inspect src/index.ts"
 }

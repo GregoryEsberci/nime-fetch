@@ -1,8 +1,8 @@
 import { and, eq, ne, notInArray } from 'drizzle-orm';
-import { downloadedFileRepository } from '@/db/repositories/downloaded-file';
+import { downloadedFileRepository } from '@/database/repositories/downloaded-file';
 import downloadedFileSchema, {
   DownloadedFile,
-} from '@/db/schemas/downloaded-file';
+} from '@/database/schemas/downloaded-file';
 import sleep from '@/utils/sleep';
 import stream from 'node:stream/promises';
 import fs from 'node:fs/promises';

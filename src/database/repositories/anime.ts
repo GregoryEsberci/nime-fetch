@@ -1,9 +1,9 @@
 import { eq, inArray, sql } from 'drizzle-orm';
-import Repository from '@/db/base/repository';
-import animeSchema from '@/db/schemas/anime';
-import animeEpisodeSchema from '@/db/schemas/anime-episode';
+import Repository from '@/database/repositories/base';
+import animeSchema from '@/database/schemas/anime';
+import animeEpisodeSchema from '@/database/schemas/anime-episode';
 import DownloadedFileRepository from './downloaded-file';
-import downloadedFileSchema from '@/db/schemas/downloaded-file';
+import downloadedFileSchema from '@/database/schemas/downloaded-file';
 
 export default class AnimeRepository extends Repository<typeof animeSchema> {
   override readonly schema = animeSchema;

@@ -1,9 +1,11 @@
-import { animeRepository } from '@/db/repositories/anime';
-import animeSchema from '@/db/schemas/anime';
-import animeEpisodeSchema, { AnimeEpisode } from '@/db/schemas/anime-episode';
+import { animeRepository } from '@/database/repositories/anime';
+import animeSchema from '@/database/schemas/anime';
+import animeEpisodeSchema, {
+  AnimeEpisode,
+} from '@/database/schemas/anime-episode';
 import downloadedFileSchema, {
   DownloadedFile,
-} from '@/db/schemas/downloaded-file';
+} from '@/database/schemas/downloaded-file';
 import { eq } from 'drizzle-orm';
 import path from 'node:path';
 

@@ -1,13 +1,13 @@
 import ContextLogger from '@/utils/context-logger';
-import { router } from '@/api/app';
+import { router } from '@/app';
 import httpStatusCodes from '@/utils/http-status-codes';
 import sendResponseError from '@/utils/send-error-response';
 import ApiError from '@/utils/api-error';
-import AnimeEpisodeRepository from '@/db/repositories/anime-episode';
-import sqliteDb from '@/db/base/sqlite';
+import AnimeEpisodeRepository from '@/database/repositories/anime-episode';
+import database from '@/database/connection';
 import { count, eq } from 'drizzle-orm';
-import animeEpisodeSchema from '@/db/schemas/anime-episode';
-import AnimeRepository from '@/db/repositories/anime';
+import animeEpisodeSchema from '@/database/schemas/anime-episode';
+import AnimeRepository from '@/database/repositories/anime';
 
 router.delete('/api/anime-episode/:id', async (request, response) => {
   const logger = new ContextLogger(request);
@@ -24,7 +24,7 @@ router.delete('/api/anime-episode/:id', async (request, response) => {
       });
     }
 
-    sqliteDb.transaction((tx) => {
+    database.transaction((tx) => {
       const animeEpisodeRepository = new AnimeEpisodeRepository(tx);
       const animeRepository = new AnimeRepository(tx);
 

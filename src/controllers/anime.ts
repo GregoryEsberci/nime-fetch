@@ -1,9 +1,9 @@
 import ContextLogger from '@/utils/context-logger';
-import { router } from '@/api/app';
+import { router } from '@/app';
 import AnimeService from '@/services/anime';
 import httpStatusCodes from '@/utils/http-status-codes';
 import sendResponseError from '@/utils/send-error-response';
-import { animeRepository } from '@/db/repositories/anime';
+import { animeRepository } from '@/database/repositories/anime';
 import ApiError from '@/utils/api-error';
 import registerAnimeFromUrl from '@/services/register-anime-from-url';
 import isValidHttpUrl from '@/utils/is-valid-http-url';

@@ -18,7 +18,7 @@ COPY --from=builder /app/dist ./dist
 COPY --link --chmod=755 scripts/docker-entrypoint.sh /usr/local/bin/
 
 RUN yarn install --frozen-lockfile --production && yarn cache clean
-RUN chmod -R 777 ./dist/static
+RUN chmod -R 777 ./dist/public
 
 VOLUME ["/downloads"]
 VOLUME ["/database"]

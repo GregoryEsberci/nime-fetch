@@ -5,7 +5,7 @@ import {
   SQLiteTable,
   SQLiteUpdateSetSource,
 } from 'drizzle-orm/sqlite-core';
-import sqliteDb from './sqlite';
+import database from '../connection';
 import Database from 'better-sqlite3';
 import { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import { now } from '@/utils/db';
@@ -14,7 +14,7 @@ import { eq } from 'drizzle-orm';
 export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {
   abstract readonly schema: T;
 
-  constructor(public db: BetterSQLite3Database = sqliteDb) {}
+  constructor(public db: BetterSQLite3Database = database) {}
 
   select<T extends SelectedFields | undefined = undefined>(fields?: T) {
     const select: SQLiteSelectBuilder<T, 'sync', Database.RunResult, 'db'> =

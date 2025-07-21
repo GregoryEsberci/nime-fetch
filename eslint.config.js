@@ -30,7 +30,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/static/**/*.js'],
+    files: ['src/public/**/*.js'],
     languageOptions: {
       globals: {
         BASE_PATH: 'readonly',
