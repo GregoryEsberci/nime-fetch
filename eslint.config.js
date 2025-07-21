@@ -4,6 +4,7 @@ import tsEslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import globals from 'globals';
 import html from '@html-eslint/eslint-plugin';
+import jest from 'eslint-plugin-jest';
 
 export default defineConfig([
   eslint.configs.recommended,
@@ -52,6 +53,13 @@ export default defineConfig([
       ...html.configs['flat/recommended'].rules,
       '@html-eslint/indent': ['error', 2],
       'prettier/prettier': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.ts'],
+    ...jest.configs['flat/recommended'],
+    rules: {
+      ...jest.configs['flat/recommended'].rules,
     },
   },
 ]);
