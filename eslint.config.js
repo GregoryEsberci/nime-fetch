@@ -28,6 +28,14 @@ export default defineConfig([
     },
   },
   {
+    files: ['scripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     ...html.configs['flat/recommended'],
     files: ['**/*.html'],
     rules: {
