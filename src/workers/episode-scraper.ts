@@ -14,7 +14,7 @@ import DownloadedFileRepository from '../db/repositories/downloaded-file';
 import path from 'node:path';
 import sanitizeFileName from '../utils/sanitize-file-name';
 
-const logger = new ContextLogger('Episode scraper');
+const logger = new ContextLogger('Episode scraper', { withId: false });
 const LOOP_INTERVAL = 5000;
 
 const decodeDispositionFilename = (header: string) => {
@@ -80,8 +80,6 @@ const processEpisode = async ({
 };
 
 const process = async () => {
-  logger.log(`Start process`);
-
   while (true) {
     const anime = animeRepository
       .select({
@@ -144,8 +142,6 @@ const process = async () => {
         .run();
     }
   }
-
-  logger.log('Finished process');
 };
 
 const cleanup = () => {

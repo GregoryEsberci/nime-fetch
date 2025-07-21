@@ -15,7 +15,7 @@ import { DOWNLOAD_DIR } from '../utils/constants';
 const LOOP_INTERVAL = 5000;
 const DOWNLOAD_BATCH_SIZE = 5;
 
-const logger = new ContextLogger('DownloaderWorker');
+const logger = new ContextLogger('Downloader', { withId: false });
 
 const download = async (downloadFile: DownloadedFile) => {
   logger.log(`Starting download from "${downloadFile.downloadUrl}"`);
@@ -52,8 +52,6 @@ const download = async (downloadFile: DownloadedFile) => {
 };
 
 const process = async () => {
-  logger.log(`Start process`);
-
   const promises = new Set<Promise<void>>();
   const processingIds = new Set<number>();
 
@@ -88,8 +86,6 @@ const process = async () => {
         });
       });
   } while (promises.size > 0);
-
-  logger.log('Finished process');
 };
 
 const cleanup = () => {
