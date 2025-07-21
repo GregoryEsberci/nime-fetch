@@ -1,14 +1,14 @@
-import { findScraperByUrl } from '../scrapers/index';
-import sqliteDb from '../db/base/sqlite';
-import AnimeRepository from '../db/repositories/anime';
-import AnimeEpisodeRepository from '../db/repositories/anime-episode';
-import { AnimeEpisodeInsert } from '../db/schemas/anime-episode';
-import ApiError from '../utils/api-error';
-import ContextLogger from '../utils/context-logger';
-import sanitizeFileName from '../utils/sanitize-file-name';
-import httpStatusCodes from '../utils/http-status-codes';
+import { findScraperByUrl } from '@/scrapers/index';
+import sqliteDb from '@/db/base/sqlite';
+import AnimeRepository from '@/db/repositories/anime';
+import AnimeEpisodeRepository from '@/db/repositories/anime-episode';
+import { AnimeEpisodeInsert } from '@/db/schemas/anime-episode';
+import ApiError from '@/utils/api-error';
+import ContextLogger from '@/utils/context-logger';
+import sanitizeFileName from '@/utils/sanitize-file-name';
+import httpStatusCodes from '@/utils/http-status-codes';
 import { eq } from 'drizzle-orm';
-import animeSchema from '../db/schemas/anime';
+import animeSchema from '@/db/schemas/anime';
 
 const registerAnimeFromUrl = async (url: string) => {
   const contextLogger = new ContextLogger('registerAnimeFromUrl');

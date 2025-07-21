@@ -1,16 +1,16 @@
 import { and, eq, ne, notInArray } from 'drizzle-orm';
-import { downloadedFileRepository } from '../db/repositories/downloaded-file';
+import { downloadedFileRepository } from '@/db/repositories/downloaded-file';
 import downloadedFileSchema, {
   DownloadedFile,
-} from '../db/schemas/downloaded-file';
-import sleep from '../utils/sleep';
+} from '@/db/schemas/downloaded-file';
+import sleep from '@/utils/sleep';
 import stream from 'node:stream/promises';
 import fs from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
-import { increment } from '../utils/db';
-import ContextLogger from '../utils/context-logger';
+import { increment } from '@/utils/db';
+import ContextLogger from '@/utils/context-logger';
 import { dirname, join } from 'node:path';
-import { DOWNLOAD_DIR } from '../utils/constants';
+import { DOWNLOAD_DIR } from '@/utils/constants';
 
 const LOOP_INTERVAL = 5000;
 const DOWNLOAD_BATCH_SIZE = 5;

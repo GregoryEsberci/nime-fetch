@@ -74,7 +74,8 @@
   margin-left: auto;
 }
 
-.deletion-button, .link-icon {
+.deletion-button,
+.link-icon {
   width: 2.5rem;
   height: 2.5rem;
   background: transparent;

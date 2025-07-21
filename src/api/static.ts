@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'node:path';
-import { DOWNLOAD_DIR, SOURCE_DIR } from '../utils/constants';
+import { DOWNLOAD_DIR, SOURCE_DIR } from '@/utils/constants';
 import mime from 'mime';
 import { router } from './app';
 

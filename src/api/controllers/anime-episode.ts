@@ -1,13 +1,13 @@
-import ContextLogger from '../../utils/context-logger';
-import { router } from '../app';
-import httpStatusCodes from '../../utils/http-status-codes';
-import sendResponseError from '../../utils/send-error-response';
-import ApiError from '../../utils/api-error';
-import AnimeEpisodeRepository from '../../db/repositories/anime-episode';
-import sqliteDb from '../../db/base/sqlite';
+import ContextLogger from '@/utils/context-logger';
+import { router } from '@/api/app';
+import httpStatusCodes from '@/utils/http-status-codes';
+import sendResponseError from '@/utils/send-error-response';
+import ApiError from '@/utils/api-error';
+import AnimeEpisodeRepository from '@/db/repositories/anime-episode';
+import sqliteDb from '@/db/base/sqlite';
 import { count, eq } from 'drizzle-orm';
-import animeEpisodeSchema from '../../db/schemas/anime-episode';
-import AnimeRepository from '../../db/repositories/anime';
+import animeEpisodeSchema from '@/db/schemas/anime-episode';
+import AnimeRepository from '@/db/repositories/anime';
 
 router.delete('/api/anime-episode/:id', async (request, response) => {
   const logger = new ContextLogger(request);

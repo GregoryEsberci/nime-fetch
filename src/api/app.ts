@@ -1,5 +1,5 @@
 import express from 'express';
-import { PORT, BASE_PATH } from '../utils/constants.js';
+import { PORT, BASE_PATH } from '@/utils/constants.js';
 
 export const app = express();
 export const router = express.Router();

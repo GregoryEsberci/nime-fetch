@@ -1,5 +1,5 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { idColumn, timestampsColumns } from '../base/column';
+import { idColumn, timestampsColumns } from '@/db/base/column';
 
 const downloadedFileSchema = sqliteTable('download_files', {
   id: idColumn,

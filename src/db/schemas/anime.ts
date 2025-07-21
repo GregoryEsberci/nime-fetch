@@ -1,5 +1,5 @@
 import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { idColumn, timestampsColumns } from '../base/column';
+import { idColumn, timestampsColumns } from '@/db/base/column';
 
 const animeSchema = sqliteTable('animes', {
   id: idColumn,

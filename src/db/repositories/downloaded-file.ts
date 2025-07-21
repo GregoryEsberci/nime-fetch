@@ -1,5 +1,5 @@
-import Repository from '../base/repository';
-import downloadedFileSchema from '../schemas/downloaded-file';
+import Repository from '@/db/base/repository';
+import downloadedFileSchema from '@/db/schemas/downloaded-file';
 
 export default class DownloadedFileRepository extends Repository<
   typeof downloadedFileSchema

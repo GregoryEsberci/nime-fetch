@@ -8,7 +8,7 @@ import {
 import sqliteDb from './sqlite';
 import Database from 'better-sqlite3';
 import { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
-import { now } from '../../utils/db';
+import { now } from '@/utils/db';
 import { eq } from 'drizzle-orm';
 
 export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {

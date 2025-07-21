@@ -10,8 +10,10 @@
     "skipLibCheck": true,
     "declaration": false,
     "outDir": "dist",
+    "noImplicitOverride": true,
 
-    "noImplicitOverride": true
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
   },
   "include": ["src"],
 }

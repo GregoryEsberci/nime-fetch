@@ -1,6 +1,6 @@
-import ApiError from '../utils/api-error';
+import ApiError from '@/utils/api-error';
 import Scraper, { ScrapedAnime, ScrapedAnimeEpisode } from './base';
-import ContextLogger from '../utils/context-logger';
+import ContextLogger from '@/utils/context-logger';
 
 class AnimeFirePlusScraper extends Scraper {
   override logger = new ContextLogger('AnimeFirePlusScraper');

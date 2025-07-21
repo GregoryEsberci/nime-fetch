@@ -1,18 +1,18 @@
 import { and, eq, exists, ne } from 'drizzle-orm';
 import AnimeEpisodeRepository, {
   animeEpisodeRepository,
-} from '../db/repositories/anime-episode';
-import animeEpisodeSchema, { AnimeEpisode } from '../db/schemas/anime-episode';
-import ContextLogger from '../utils/context-logger';
-import sleep from '../utils/sleep';
-import { animeRepository } from '../db/repositories/anime';
-import animeSchema from '../db/schemas/anime';
-import { findScraperByUrl } from '../scrapers/index';
-import { ScraperClass } from '../scrapers/base';
-import sqliteDb from '../db/base/sqlite';
-import DownloadedFileRepository from '../db/repositories/downloaded-file';
+} from '@/db/repositories/anime-episode';
+import animeEpisodeSchema, { AnimeEpisode } from '@/db/schemas/anime-episode';
+import ContextLogger from '@/utils/context-logger';
+import sleep from '@/utils/sleep';
+import { animeRepository } from '@/db/repositories/anime';
+import animeSchema from '@/db/schemas/anime';
+import { findScraperByUrl } from '@/scrapers/index';
+import { ScraperClass } from '@/scrapers/base';
+import sqliteDb from '@/db/base/sqlite';
+import DownloadedFileRepository from '@/db/repositories/downloaded-file';
 import path from 'node:path';
-import sanitizeFileName from '../utils/sanitize-file-name';
+import sanitizeFileName from '@/utils/sanitize-file-name';
 
 const logger = new ContextLogger('Episode scraper', { withId: false });
 const LOOP_INTERVAL = 5000;

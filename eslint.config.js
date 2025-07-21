@@ -4,7 +4,6 @@ import tsEslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import globals from 'globals';
 import html from '@html-eslint/eslint-plugin';
-import css from '@eslint/css';
 
 export default defineConfig([
   eslint.configs.recommended,
@@ -13,6 +12,17 @@ export default defineConfig([
   eslintPluginPrettierRecommended,
   globalIgnores(['dist']),
   {
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+        alias: {
+          map: [['@', './src']],
+          extensions: ['.ts', '.js', '.tsx', '.jsx', '.json'],
+        },
+      },
+    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
@@ -43,11 +53,5 @@ export default defineConfig([
       '@html-eslint/indent': ['error', 2],
       'prettier/prettier': 'off',
     },
-  },
-  {
-    files: ['**/*.css'],
-    language: 'css/css',
-    plugins: { css },
-    extends: ['css/recommended'],
   },
 ]);
