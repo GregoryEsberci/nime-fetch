@@ -6,10 +6,14 @@ const config: Config = {
   transform: {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { jsc: { target: 'es2022' } }],
   },
-  setupFiles: [
-    '<rootDir>/scripts/setup-tests-envs.ts',
-    '<rootDir>/scripts/setup-tests.ts',
+  setupFilesAfterEnv: [
+    '<rootDir>/tests/scripts/setup-tests-envs.ts',
+    '<rootDir>/tests/scripts/setup-tests.ts',
   ],
+  transformIgnorePatterns: ['/node_modules/(?!chalk|ansi-styles)/'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 };
 
 export default config;

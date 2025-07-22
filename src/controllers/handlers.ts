@@ -1,7 +1,7 @@
 import { count } from 'drizzle-orm';
 import { animeRepository } from '@/database/repositories/anime';
 import httpStatusCodes from '@/utils/http-status-codes';
-import { router } from '../app';
+import { router } from '@/app';
 
 router.get('/healthcheck', (_request, response) => {
   try {

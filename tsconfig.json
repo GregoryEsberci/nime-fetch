@@ -15,5 +15,5 @@
     "baseUrl": ".",
     "paths": { "@/*": ["src/*"] }
   },
-  "include": ["src", "__tests__", "scripts"]
+  "include": ["src", "tests", "scripts"]
 }

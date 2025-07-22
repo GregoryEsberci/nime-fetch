@@ -2,7 +2,7 @@ import { eq, inArray, sql } from 'drizzle-orm';
 import Repository from '@/database/repositories/base';
 import animeSchema from '@/database/schemas/anime';
 import animeEpisodeSchema from '@/database/schemas/anime-episode';
-import DownloadedFileRepository from './downloaded-file';
+import DownloadedFileRepository from '@/database/repositories/downloaded-file';
 import downloadedFileSchema from '@/database/schemas/downloaded-file';
 
 export default class AnimeRepository extends Repository<typeof animeSchema> {

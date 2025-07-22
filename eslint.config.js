@@ -5,13 +5,15 @@ import eslint from '@eslint/js';
 import globals from 'globals';
 import html from '@html-eslint/eslint-plugin';
 import jest from 'eslint-plugin-jest';
+import gitignore from 'eslint-config-flat-gitignore';
 
 export default defineConfig([
   eslint.configs.recommended,
   tsEslint.configs.strict,
   tsEslint.configs.stylistic,
   eslintPluginPrettierRecommended,
-  globalIgnores(['dist']),
+  gitignore(),
+  globalIgnores(['tests/mocks/pages']),
   {
     settings: {
       'import/resolver': {
@@ -20,7 +22,7 @@ export default defineConfig([
         },
         alias: {
           map: [['@', './src']],
-          extensions: ['.ts', '.js', '.tsx', '.jsx', '.json'],
+          extensions: ['.ts'],
         },
       },
     },
@@ -60,6 +62,13 @@ export default defineConfig([
     ...jest.configs['flat/recommended'],
     rules: {
       ...jest.configs['flat/recommended'].rules,
+      ...jest.configs['flat/style'].rules,
+      'jest/expect-expect': [
+        'error',
+        {
+          assertFunctionNames: ['expect', 'request.**.expect'],
+        },
+      ],
     },
   },
 ]);

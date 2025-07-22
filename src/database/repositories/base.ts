@@ -5,7 +5,7 @@ import {
   SQLiteTable,
   SQLiteUpdateSetSource,
 } from 'drizzle-orm/sqlite-core';
-import database from '../connection';
+import database from '@/database/connection';
 import Database from 'better-sqlite3';
 import { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import { now } from '@/utils/db';
@@ -40,5 +40,12 @@ export default abstract class Repository<T extends SQLiteTable = SQLiteTable> {
     return this.update(data)
       .where(eq((this.schema as any).id, id))
       .run();
+  }
+
+  findById(id: number) {
+    return this.select()
+      .where(eq((this.schema as any).id, id))
+      .limit(1)
+      .get();
   }
 }

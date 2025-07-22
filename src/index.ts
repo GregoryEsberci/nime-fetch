@@ -1,7 +1,7 @@
-import './setup';
-import './app';
-import './controllers/index';
+import '@/setup';
+import '@/app';
+import '@/controllers/index';
 
-import startWorkers from './workers/index';
+import startWorkers from '@/workers/index';
 
 startWorkers();
