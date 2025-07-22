@@ -6,6 +6,7 @@ import globals from 'globals';
 import html from '@html-eslint/eslint-plugin';
 import jest from 'eslint-plugin-jest';
 import gitignore from 'eslint-config-flat-gitignore';
+import jestExtended from 'eslint-plugin-jest-extended';
 
 export default defineConfig([
   eslint.configs.recommended,
@@ -21,7 +22,10 @@ export default defineConfig([
           project: './tsconfig.json',
         },
         alias: {
-          map: [['@', './src']],
+          map: [
+            ['@', './src'],
+            ['@tests', './tests'],
+          ],
           extensions: ['.ts'],
         },
       },
@@ -29,6 +33,22 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.js'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['../*'],
+              message: 'Use alias imports instead of relative paths',
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -70,5 +90,9 @@ export default defineConfig([
         },
       ],
     },
+  },
+  {
+    files: ['**/*.test.ts'],
+    ...jestExtended.configs['flat/all'],
   },
 ]);

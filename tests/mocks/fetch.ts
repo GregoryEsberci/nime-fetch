@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { PAGE_URL, PAGES_PATH } from '../constants';
+import { PAGE_URL, PAGES_PATH } from '@tests/constants';
 import fs from 'node:fs/promises';
 
 type Fetch = typeof global.fetch;
@@ -9,7 +9,7 @@ type FetchInit = Parameters<Fetch>[1];
 
 const originalFetch = global.fetch;
 
-const getHtmlPage = async (requestUrl: URL) => {
+export const getHtmlResponse = async (requestUrl: string) => {
   let filePath;
 
   const pageUrlEntries = Object.entries(PAGE_URL);
@@ -21,7 +21,7 @@ const getHtmlPage = async (requestUrl: URL) => {
     for (let i = 0; i < urlEntries.length && !filePath; i++) {
       const [fileName, pageUrl] = urlEntries[i];
 
-      if (pageUrl === requestUrl.toString()) {
+      if (pageUrl === requestUrl) {
         filePath = path.join(PAGES_PATH, folderName, `${fileName}.html`);
       }
     }
@@ -40,10 +40,19 @@ const getHtmlPage = async (requestUrl: URL) => {
     return;
   }
 
-  return fs.readFile(filePath, 'utf-8');
+  const html = await fs.readFile(filePath, 'utf-8');
+
+  return new Response(html, {
+    status: 200,
+    statusText: 'OK',
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Length': html.length.toString(),
+    },
+  });
 };
 
-const getFetchInfo = (input: FetchInput, init: FetchInit) => {
+export const getFetchInfo = (input: FetchInput, init: FetchInit) => {
   if (input instanceof URL) {
     return {
       url: input,
@@ -64,8 +73,8 @@ const getFetchInfo = (input: FetchInput, init: FetchInit) => {
   };
 };
 
-global.fetch = jest.fn(
-  async (input: FetchInput, init: FetchInit): Promise<Response> => {
+export const applyFetchMock = () => {
+  jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
     const { url, method } = getFetchInfo(input, init);
 
     if (url.hostname === 'localhost') {
@@ -73,20 +82,14 @@ global.fetch = jest.fn(
     }
 
     if (method === 'GET') {
-      const html = await getHtmlPage(url);
+      const clearUrl = new URL(url);
+      clearUrl.search = '';
 
-      if (html) {
-        return new Response(html, {
-          status: 200,
-          statusText: 'OK',
-          headers: {
-            'Content-Type': 'text/html; charset=utf-8',
-            'Content-Length': html.length.toString(),
-          },
-        });
-      }
+      const response = await getHtmlResponse(clearUrl.toString());
+
+      if (response) return response;
     }
 
     throw new Error(`[fetch mock] No mock found for ${method} ${url}`);
-  },
-);
+  });
+};

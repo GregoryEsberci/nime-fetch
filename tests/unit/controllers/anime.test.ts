@@ -1,17 +1,17 @@
-import request from 'supertest';
 import { app } from '@/app';
 import { animeRepository } from '@/database/repositories/anime';
 import { animeEpisodeRepository } from '@/database/repositories/anime-episode';
-import { buildAnime } from 'tests/factories/anime';
-import { buildAnimeEpisode } from 'tests/factories/anime-episode';
+import { downloadedFileRepository } from '@/database/repositories/downloaded-file';
 import { Anime } from '@/database/schemas/anime';
 import { AnimeEpisode } from '@/database/schemas/anime-episode';
-import httpStatusCodes from '@/utils/http-status-codes';
-import { buildDownloadedFile } from 'tests/factories/downloaded-file';
 import { DownloadedFile } from '@/database/schemas/downloaded-file';
-import { downloadedFileRepository } from '@/database/repositories/downloaded-file';
-import { PAGE_URL } from '../../constants';
+import httpStatusCodes from '@/utils/http-status-codes';
+import { PAGE_URL } from '@tests/constants';
+import { buildAnime } from '@tests/factories/anime';
+import { buildAnimeEpisode } from '@tests/factories/anime-episode';
+import { buildDownloadedFile } from '@tests/factories/downloaded-file';
 import { count } from 'drizzle-orm';
+import request from 'supertest';
 
 describe('GET /api/anime', () => {
   it('should get all anime successfully', async () => {

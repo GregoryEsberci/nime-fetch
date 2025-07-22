@@ -1,7 +1,6 @@
 import type { Config } from 'jest';
 
 const config: Config = {
-  clearMocks: true,
   coverageProvider: 'v8',
   transform: {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { jsc: { target: 'es2022' } }],
@@ -13,6 +12,7 @@ const config: Config = {
   transformIgnorePatterns: ['/node_modules/(?!chalk|ansi-styles)/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@tests/(.*)$': '<rootDir>/tests/$1',
   },
 };
 
