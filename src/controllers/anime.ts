@@ -1,6 +1,6 @@
 import ContextLogger from '@/utils/context-logger';
 import { router } from '@/app';
-import AnimeService from '@/services/anime';
+import AnimeQueryService from '@/services/anime-query';
 import httpStatusCodes from '@/utils/http-status-codes';
 import sendResponseError from '@/utils/send-error-response';
 import { animeRepository } from '@/database/repositories/anime';
@@ -15,7 +15,7 @@ router.get('/api/anime', (request, response) => {
   try {
     logger.log('Fetching anime list from DB.');
 
-    const animes = new AnimeService().queryAll();
+    const animes = new AnimeQueryService().queryAll();
 
     logger.log(`Returning ${animes.length} animes`);
     response.status(httpStatusCodes.OK).json(animes);

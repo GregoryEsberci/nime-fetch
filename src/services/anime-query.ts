@@ -27,7 +27,7 @@ interface AnimeListItem {
   }[];
 }
 
-export default class AnimeService {
+export default class AnimeQueryService {
   #queryRawRows() {
     return animeRepository
       .select({
